@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
+
 exports.get = (req,res,next) => {
     User.findById(req.params.userId)
     .populate('topics', 'name _id')
@@ -18,6 +19,47 @@ exports.get = (req,res,next) => {
             userName: user.userName,
             topics: user.topics
         });
+    })
+    .catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+};
+
+exports.topTen = (req,res,next) => {
+    User.findById(req.params.userId)
+    //.populate('topics', 'name _id resources')
+    .populate('topics')
+    //.populate('topics', 'name _id')
+    .exec()
+    .then(userInfo  => {
+        if (! userInfo ){
+            return res.status(404).json({
+                message: 'User not found'
+            })
+        }
+        const response ={
+            userName: userInfo.userName,
+            //topics: userInfo.topics
+            //topics: userInfo.topics.length
+            /*topics: userInfo.topics.map(topic => {
+                return {
+                    _id: topic._id,
+                    name: topic.name,
+                    resources: topic.resources.length
+                }
+            }) */
+            topics: userInfo.topics.sort().slice(0,9).map(topic => {
+                return {
+                    _id: topic._id,
+                    name: topic.name,
+                    //resources: topic.resources.length
+                    resources: topic.resources
+                }
+            })
+        }
+        res.status(200).json({response});
     })
     .catch(err => {
         res.status(500).json({

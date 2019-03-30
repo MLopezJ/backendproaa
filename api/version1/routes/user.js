@@ -10,6 +10,9 @@ router.post('/login', UserController.login );
 
 router.delete("/:userId", checkAuth, UserController.delete);
 
-router.get("/:userId", checkAuth, UserController.get);
+//router.get("/:userId", checkAuth, UserController.get);
+router.get("/:userId",checkAuth, UserController.get);
+
+router.get("/:userId/top", checkAuth, UserController.topTen);
 
 module.exports = router;

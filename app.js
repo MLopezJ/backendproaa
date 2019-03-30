@@ -4,20 +4,14 @@ const morgan = require('morgan'); //middleware
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const productsRoutes = require('./api/version1/routes/products');
-const ordersRoutes = require('./api/version1/routes/orders');
 const userRoutes = require("./api/version1/routes/user");
 const topicsRoutes = require('./api/version1/routes/topic');
 const resourcesRoutes = require('./api/version1/routes/resources');
 
-/*
-mongoose.connect('mongodb+srv://node-shop:'+ process.env.MONGO_ATLAS_PW +'@node-rest-shop-aykdx.mongodb.net/test?retryWrites=true',
-{
-    useMongoClient: true
-});
-*/
 mongoose.connect(
-    'mongodb+srv://node-shop:node-shop@node-rest-shop-aykdx.mongodb.net/test?retryWrites=true',
+    "mongodb+srv://node-shop:"
+        +process.env.MONGO_ATLAS_PW+
+    "@node-rest-shop-aykdx.mongodb.net/test?retryWrites=true",
     {useNewUrlParser: true}
 ); 
 
@@ -43,16 +37,8 @@ app.use((req,res,next) =>{
     next();
 });
 
-// middleware
-/*
-app.use((req, res, next) => {
-    res.status(200).json({
-        message: 'Its works'
-    });
-}); */
 
-app.use('/products', productsRoutes);  //should be singular 
-app.use('/orders', ordersRoutes); //should be singular 
+//should be singular 
 app.use('/user', userRoutes);
 app.use('/topics', topicsRoutes);
 app.use('/resources',resourcesRoutes);

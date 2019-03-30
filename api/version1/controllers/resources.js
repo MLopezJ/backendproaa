@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Resource = require('../models/resource');
 const Topic = require('../models/topic');
-
+const User = require('../models/user');
 
 exports.create = (req,res,next) => {
     const _id = mongoose.Types.ObjectId()
@@ -67,10 +67,17 @@ exports.get = (req,res,next) => {
 exports.update = (req,res,next) => {
     const id = req.params.resourceId;
     const updateOps = {};
-
-    for (const ops of req.body){
-        updateOps[ops.propName] = ops.value;
+    
+    if (req.body[0].hasOwnProperty('name')){
+        updateOps["name"] = req.body[0].name;
     }
+    if (req.body[0].hasOwnProperty('description')){
+        updateOps["description"] = req.body[0].description;
+    }
+    if (req.body[0].hasOwnProperty("url")){
+        updateOps["url"] = req.body[0].url;
+    }
+    
     Resource.update({ _id: id}, {$set: updateOps})
     .exec()
     .then(result => {
@@ -89,7 +96,8 @@ exports.update = (req,res,next) => {
 
 exports.delete = (req,res,next) => {
     Resource.remove({
-        _id: req.params.resourceId
+        _id: req.params.resourceId,
+       // multi: true
     })
     .exec()
     .then(result => {

@@ -92,10 +92,11 @@ exports.get = (req,res,next) => {
 exports.update = (req,res,next) => {
     const id = req.params.topicId;
     const updateOps = {};
+    
     for (const ops of req.body){
         updateOps["name"] = ops.name;
-        //updateOps[ops.propName] = ops.value;
     }
+
     Topic.update({ _id: id}, {$set: updateOps})
     .exec()
     .then(result => {
